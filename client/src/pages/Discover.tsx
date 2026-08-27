@@ -24,7 +24,6 @@ import { EmptyState } from "@/components/discover/EmptyState";
 import { AiAssistModal } from "@/components/discover/AiAssistModal";
 import { ResourceDetailsModal } from "@/components/discover/ResourceDetailsModal";
 import { loadAppStore, useAppStore } from "@/lib/appStore";
-import { GooeyNav } from "@/components/ui/GooeyNav";
 
 const CATEGORIES = [
   { id: "All", label: "All" },
@@ -222,18 +221,24 @@ export default function Discover() {
 
           </div>
 
-          {/* REACT BITS GOOEY NAV CATEGORY COMPONENT */}
-          <div className="mt-6 pt-5 border-t border-[#151515]/08">
-            <GooeyNav
-              items={CATEGORIES.map((cat) => ({ id: cat.id, label: cat.label }))}
-              initialActiveIndex={Math.max(0, CATEGORIES.findIndex((cat) => cat.id === selectedCategory))}
-              onSelect={(index, item) => {
-                setSelectedCategory(item.id || CATEGORIES[index].id);
-              }}
-              particleCount={15}
-              animationTime={600}
-              particleDistances={[80, 15]}
-            />
+          {/* CATEGORY NAV HORIZONTAL PILLS */}
+          <div className="mt-6 pt-5 border-t border-[#151515]/08 flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+            {CATEGORIES.map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider whitespace-nowrap transition-all duration-150 cursor-pointer ${
+                    isActive
+                      ? "bg-[#151518] text-[#FFFDF7] shadow-xs active:scale-95"
+                      : "bg-[#F3EFE6] text-[#151515]/75 hover:text-[#151515] hover:bg-[#E8E4DA] active:scale-95"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              );
+            })}
           </div>
 
         </div>

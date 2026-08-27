@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { BRAND_COLORS } from "@/lib/theme";
 import { ResourceDetailsModal } from "@/components/discover/ResourceDetailsModal";
-import { GooeyNav } from "@/components/ui/GooeyNav";
 
 interface ResourceCard {
   id: string;
@@ -165,17 +164,24 @@ export const CampusResourceGrid: React.FC = () => {
           </p>
         </div>
 
-        {/* GooeyNav Category Filters */}
-        <div>
-          <GooeyNav
-            items={CATEGORIES.map((cat) => ({ id: cat, label: cat === "All" ? "ALL" : cat.toUpperCase() }))}
-            initialActiveIndex={Math.max(0, CATEGORIES.indexOf(activeCategory as any))}
-            onSelect={(index, item) => {
-              setActiveCategory(item.id || CATEGORIES[index]);
-            }}
-            particleCount={12}
-            animationTime={500}
-          />
+        {/* Category Pills */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`text-xs font-extrabold px-4 py-2 rounded-full transition-all duration-150 uppercase tracking-wider cursor-pointer ${
+                  isActive
+                    ? "bg-[#151515] text-[#FFFDF7] shadow-xs active:scale-95"
+                    : "bg-[#F3EFE6] text-[#151515]/75 hover:text-[#151515] hover:bg-[#E8E4DA] active:scale-95"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
       </div>
 
