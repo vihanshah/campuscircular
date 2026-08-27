@@ -1,0 +1,11 @@
+student_id,name,email,demo_password,department,year,location,trust_score_pct,rating,total_exchanges,co2_saved_kg,money_saved_rupees,handle
+CC1001,Aarav Sharma,aarav.sharma@tsec.edu,pass1001,Computer Science,3rd Year,CS Tech Hub,98,4.9,24,52,6500,@aarav_cs
+CC1002,Ananya Verma,ananya.verma@tsec.edu,pass1002,Graphic Design,2nd Year,Arts Wing,96,4.8,18,38,4200,@ananya_design
+CC1003,Rohan Mehta,rohan.mehta@tsec.edu,pass1003,Mechanical Engineering,3rd Year,Engineering Block B,99,5.0,32,64,7800,@rohan_mech
+CC1004,Priya Nair,priya.nair@tsec.edu,pass1004,Media & Film Guild,4th Year,Media Lab,100,5.0,45,88,12500,@priya_film
+CC1005,Kabir Patel,kabir.patel@tsec.edu,pass1005,Electronics & Hardware,4th Year,Hardware Hub,95,4.7,15,29,3600,@kabir_ee
+CC1006,Diya Sengupta,diya.sengupta@tsec.edu,pass1006,Mathematics Honor,2nd Year,Science Quad,97,4.9,21,41,5100,@diya_math
+CC1007,Alex Rivera,alex.rivera@tsec.edu,pass1007,Cinema & Photography,3rd Year,Student Center,98,4.9,29,58,8200,@alex_cinema
+CC1008,Vikram Joshi,vikram.joshi@tsec.edu,pass1008,Music & Performing Arts,2nd Year,Dorm B Quad,94,4.7,14,26,3100,@vikram_music
+CC1009,Sanya Kapoor,sanya.kapoor@tsec.edu,pass1009,Biotechnology Lab,3rd Year,Bio Lab C,99,5.0,27,51,6900,@sanya_bio
+CC1010,Tanmay Bhatia,tanmay.bhatia@tsec.edu,pass1010,Robotics & AI,4th Year,Innovation Lab,96,4.8,19,35,4800,@tanmay_robotics

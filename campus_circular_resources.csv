@@ -1,0 +1,7 @@
+resource_id,resource_name,category,owner_id,owner_name,condition,price_per_day_rupees,deposit,location,distance_km,status,rating
+res-canon-camera,Canon EOS Rebel DSLR Kit,Photography,CC1007,Alex Rivera,Excellent,120,₹500 deposit,Media Lab · TSEC Campus,0.8,Available,4.9
+res-sony-camera,Sony Alpha A7 IV 4K Camera,Photography,CC1004,Priya Nair,Like New,200,₹1000 deposit,Media Lab,1.2,Available,5.0
+res-macbook,MacBook Pro M2 (16GB RAM),Electronics,CC1001,Aarav Sharma,Excellent,0,Free with ID,CS Tech Hub,0.5,Available,4.9
+res-calculator,Casio FX-991EX Scientific Calculator,Books,CC1006,Diya Sengupta,Excellent,0,Free with ID,Science Quad,0.4,Available,4.9
+res-guitar,Yamaha F310 Acoustic Guitar,Music,CC1008,Vikram Joshi,Good,50,₹200 deposit,Dorm B Quad,1.5,Available,4.8
+res-projector,HD 4K Portable Cinema Projector,Events,CC1004,Priya Nair,Excellent,150,₹800 deposit,Student Center,1.2,Available,5.0

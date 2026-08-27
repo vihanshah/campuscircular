@@ -1,0 +1,3 @@
+loan_id,resource_id,resource_name,borrower_id,borrower_name,lender_id,lender_name,start_date,due_date,handover_location,status,fee_display
+loan-301,res-canon-camera,Canon EOS Rebel DSLR Kit,CC1003,Rohan Mehta,CC1007,Alex Rivera,"Aug 25, 2026","Aug 30, 2026",Media Lab,ACTIVE,₹120/day
+loan-302,res-calculator,Casio Scientific Calculator,CC1003,Rohan Mehta,CC1006,Diya Sengupta,"Aug 26, 2026","Aug 29, 2026",Engineering Block B,ACTIVE,Free

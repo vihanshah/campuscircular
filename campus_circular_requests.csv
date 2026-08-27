@@ -1,0 +1,4 @@
+request_id,resource_id,resource_name,requester_id,requester_name,owner_id,owner_name,requested_dates,handover_location,status,purpose
+req-101,res-canon-camera,Canon EOS Rebel DSLR Kit,CC1003,Rohan Mehta,CC1007,Alex Rivera,"Today - Aug 30, 2026",Media Lab @ 2:00 PM,ACCEPTED,Final Year Film Project shoot
+req-102,res-calculator,Casio FX-991EX Scientific Calculator,CC1003,Rohan Mehta,CC1006,Diya Sengupta,"Aug 27 - Aug 29, 2026",Engineering Block B,ACCEPTED,Midterm Examination
+req-103,res-macbook,MacBook Pro M2 (16GB RAM),CC1002,Ananya Verma,CC1001,Aarav Sharma,"Aug 28 - Sep 02, 2026",Arts Wing,PENDING,UI Design rendering & portfolio build
