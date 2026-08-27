@@ -106,6 +106,28 @@ export interface SharedActivityLog {
   type: "REQUEST" | "ACCEPT" | "RESOURCE_ADD" | "RETURN" | "USER";
 }
 
+export interface SharedChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  sender: "you" | "partner";
+  text: string;
+  timestamp: string;
+}
+
+export interface SharedChatThread {
+  id: string;
+  partnerName: string;
+  partnerRole: string;
+  partnerAvatar: string;
+  avatarBg: string;
+  itemBadge: string;
+  handoverLocation: string;
+  lastMessage: string;
+  lastTime: string;
+  messages: SharedChatMessage[];
+}
+
 export interface AppStoreData {
   users: DemoStudent[];
   resources: SharedResource[];
@@ -113,6 +135,7 @@ export interface AppStoreData {
   loans: SharedLoan[];
   disputes: SharedDispute[];
   activity: SharedActivityLog[];
+  chatThreads?: SharedChatThread[];
   currentUser: DemoStudent | null;
   currentRole: "student" | "admin";
 }
@@ -554,6 +577,96 @@ export const INITIAL_LOANS: SharedLoan[] = [
   },
 ];
 
+export const DEFAULT_CHAT_THREADS: SharedChatThread[] = [
+  {
+    id: "thread-jordan",
+    partnerName: "Jordan (Film Guild)",
+    partnerRole: "Film Guild Exec",
+    partnerAvatar: "J",
+    avatarBg: "#FFD928",
+    itemBadge: "Sony 4K Camera",
+    handoverLocation: "Media Lab · TSEC Campus",
+    lastMessage: "... finish filming with the Sony Alpha 4K camera today, ready for drop-off at Media Lab by 2pm!",
+    lastTime: "14:00 Today",
+    messages: [
+      {
+        id: "m1",
+        senderId: "CC1007",
+        senderName: "Jordan (Film Guild)",
+        sender: "partner",
+        text: "Hey! I'm finishing filming with the Sony Alpha 4K camera today, ready for drop-off at Media Lab by 2pm!",
+        timestamp: "14:00 Today",
+      },
+      {
+        id: "m2",
+        senderId: "CC1003",
+        senderName: "Rohan Mehta",
+        sender: "you",
+        text: "Awesome! I'll be near the Media Lab after my 1:30 PM lecture.",
+        timestamp: "14:05 Today",
+      },
+    ],
+  },
+  {
+    id: "thread-you",
+    partnerName: "Engineering Lab Admin",
+    partnerRole: "Lab Tech",
+    partnerAvatar: "R",
+    avatarBg: "#D7F3EB",
+    itemBadge: "Scientific Calculator",
+    handoverLocation: "Engineering Block B",
+    lastMessage: "Confirmed! Returning Scientific Calculator to Engineering Block B right after my lecture.",
+    lastTime: "1h ago",
+    messages: [
+      {
+        id: "m3",
+        senderId: "CC1003",
+        senderName: "Rohan Mehta",
+        sender: "you",
+        text: "Confirmed! Returning Scientific Calculator to Engineering Block B right after my lecture.",
+        timestamp: "1h ago",
+      },
+      {
+        id: "m4",
+        senderId: "CC1001",
+        senderName: "Engineering Lab Admin",
+        sender: "partner",
+        text: "Thanks! Drop it off at Counter 3 with the lab assistant.",
+        timestamp: "55m ago",
+      },
+    ],
+  },
+  {
+    id: "thread-alex",
+    partnerName: "Alex Rivera (Cinema Guild)",
+    partnerRole: "Cinema Lead",
+    partnerAvatar: "A",
+    avatarBg: "#FF6755",
+    itemBadge: "Acoustic Guitar",
+    handoverLocation: "Student Center",
+    lastMessage: "... meet tomorrow at Student Center to pick up the Yamaha Acoustic Guitar for Friday Jam session!",
+    lastTime: "3h ago",
+    messages: [
+      {
+        id: "m5",
+        senderId: "CC1007",
+        senderName: "Alex Rivera",
+        sender: "partner",
+        text: "Hey! Let me know if you can meet tomorrow at Student Center to pick up the Yamaha Acoustic Guitar for Friday Jam session!",
+        timestamp: "3h ago",
+      },
+      {
+        id: "m6",
+        senderId: "CC1003",
+        senderName: "Rohan Mehta",
+        sender: "you",
+        text: "Sounds great! Is 4:00 PM fine?",
+        timestamp: "2h ago",
+      },
+    ],
+  },
+];
+
 const STORAGE_KEY = "campus_circular_shared_db_v2";
 
 // ─── CENTRALIZED STORE HELPERS ────────────────────────────────────────────────
@@ -564,6 +677,9 @@ export function loadAppStore(): AppStoreData {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && Array.isArray(parsed.users) && parsed.users.length >= 10) {
+        if (!parsed.chatThreads || !Array.isArray(parsed.chatThreads) || parsed.chatThreads.length === 0) {
+          parsed.chatThreads = DEFAULT_CHAT_THREADS;
+        }
         return parsed;
       }
     }
@@ -586,6 +702,7 @@ export function loadAppStore(): AppStoreData {
         type: "USER",
       },
     ],
+    chatThreads: DEFAULT_CHAT_THREADS,
     currentUser: DEMO_STUDENTS[2], // Default to CC1003 (Rohan Mehta)
     currentRole: "student",
   };
@@ -870,4 +987,34 @@ export function deleteStudentFromStore(studentId: string): void {
   const store = loadAppStore();
   store.users = store.users.filter((u) => u.id !== studentId && u.studentId !== studentId);
   saveAppStore(store);
+}
+
+export function sendChatMessageInStore(threadId: string, text: string): SharedChatThread | null {
+  const store = loadAppStore();
+  const currentUser = getCurrentLoggedInUser();
+
+  if (!store.chatThreads || !Array.isArray(store.chatThreads)) {
+    store.chatThreads = DEFAULT_CHAT_THREADS;
+  }
+
+  const thread = store.chatThreads.find((t) => t.id === threadId);
+  if (!thread) return null;
+
+  const nowFormatted = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+
+  const newMsg: SharedChatMessage = {
+    id: `msg-${Date.now()}`,
+    senderId: currentUser.id,
+    senderName: currentUser.name,
+    sender: "you",
+    text: text.trim(),
+    timestamp: nowFormatted,
+  };
+
+  thread.messages.push(newMsg);
+  thread.lastMessage = `${currentUser.name.split(" ")[0]}: "${text.trim()}"`;
+  thread.lastTime = nowFormatted;
+
+  saveAppStore(store);
+  return thread;
 }

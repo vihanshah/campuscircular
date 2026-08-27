@@ -3,41 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   Send,
-  Camera,
-  BookOpen,
-  Music,
   MapPin,
   ShieldCheck,
   CheckCheck,
-  Sparkles,
-  Paperclip,
-  Smile,
 } from "lucide-react";
-import { getCurrentUser } from "@/lib/userStore";
-
-export interface ChatMessageItem {
-  id: string;
-  sender: "you" | "partner";
-  text: string;
-  timestamp: string;
-}
-
-export interface ChatThread {
-  id: string;
-  partnerName: string;
-  partnerRole: string;
-  partnerAvatar: string;
-  avatarBg: string;
-  itemBadge: string;
-  handoverLocation: string;
-  lastMessage: string;
-  lastTime: string;
-  messages: ChatMessageItem[];
-}
+import { getCurrentLoggedInUser, SharedChatThread } from "@/lib/appStore";
 
 interface LiveGearChatModalProps {
   isOpen: boolean;
-  activeThread: ChatThread | null;
+  activeThread: SharedChatThread | null;
   onClose: () => void;
   onSendMessage: (threadId: string, text: string) => void;
 }
@@ -48,7 +22,7 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
   onClose,
   onSendMessage,
 }) => {
-  const currentUser = getCurrentUser();
+  const currentUser = getCurrentLoggedInUser();
   const [inputText, setInputText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -115,7 +89,7 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-[#151515]/40 hover:text-[#151515] hover:bg-[#F3EFE6] rounded-xl transition-all"
+              className="p-1.5 text-[#151515]/40 hover:text-[#151515] hover:bg-[#F3EFE6] rounded-xl transition-all cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -130,12 +104,17 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
             </div>
 
             {activeThread.messages.map((msg) => {
-              const isMe = msg.sender === "you";
+              const isMe = msg.senderId === currentUser.id || msg.sender === "you";
               return (
                 <div
                   key={msg.id}
                   className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
                 >
+                  {!isMe && msg.senderName && (
+                    <span className="text-[10px] font-extrabold text-[#151515]/60 mb-0.5 px-1">
+                      {msg.senderName}
+                    </span>
+                  )}
                   <div
                     className={`max-w-[80%] p-3.5 rounded-2xl text-xs font-semibold leading-relaxed shadow-xs ${
                       isMe
@@ -165,7 +144,7 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={`Message ${activeThread.partnerName.split(" ")[0]}...`}
+              placeholder={`Message as ${currentUser.name.split(" ")[0]}...`}
               className="flex-1 bg-[#F8F6F0] border border-[#151515]/10 rounded-2xl px-4 py-2.5 text-xs font-semibold text-[#151515] placeholder:text-[#151515]/40 focus:outline-none focus:ring-2 focus:ring-[#FFD928] transition-all"
             />
 
