@@ -1,0 +1,319 @@
+import { BRAND_COLORS } from "./theme";
+
+export interface CampusResource {
+  id: string;
+  name: string;
+  category: "Photography" | "Electronics" | "Books" | "Music" | "Sports" | "Events" | "Tools" | "Creative";
+  availability: "Available now" | "Available on selected date" | "Any";
+  isAvailableNow: boolean;
+  distanceKm: number;
+  locationName: string;
+  condition: "New" | "Excellent" | "Good";
+  rating: number;
+  ownerName: string;
+  ownerAvatar: string;
+  isOwnerVerified: boolean;
+  ownerTrustScore: string;
+  pricePerDay: number; // 0 = Free
+  priceDisplay: string;
+  depositDisplay: string;
+  matchPct: number;
+  matchReasons: string[];
+  description: string;
+  cardColor: string;
+  imageUrl?: string;
+  mapCoords: { xPct: number; yPct: number };
+  alternativeTo?: string;
+}
+
+export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
+  {
+    id: "res-sony-camera",
+    name: "Sony Alpha A7 IV Camera Kit",
+    category: "Photography",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 0.8,
+    locationName: "TSEC Main Campus",
+    condition: "Excellent",
+    rating: 4.9,
+    ownerName: "Arjun Sharma",
+    ownerAvatar: "A",
+    isOwnerVerified: true,
+    ownerTrustScore: "High Trust · 28 Loans",
+    pricePerDay: 120,
+    priceDisplay: "₹120/day",
+    depositDisplay: "₹500 refundable deposit",
+    matchPct: 96,
+    matchReasons: [
+      "Available tomorrow",
+      "0.8 km away",
+      "Excellent condition",
+      "Trusted owner (28 loans)"
+    ],
+    description: "Includes 24-70mm f/2.8 GM lens, 2 rechargeable batteries, 128GB SanDisk Extreme SD card, and padded shoulder bag.",
+    cardColor: BRAND_COLORS.pastelLavender,
+    imageUrl: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&auto=format&fit=crop&q=80",
+    mapCoords: { xPct: 35, yPct: 42 },
+  },
+  {
+    id: "res-macbook-pro",
+    name: "MacBook Pro M2 (16GB RAM · 1TB)",
+    category: "Electronics",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 0.4,
+    locationName: "CS Dept · Tech Hub",
+    condition: "New",
+    rating: 5.0,
+    ownerName: "Dev Patel",
+    ownerAvatar: "D",
+    isOwnerVerified: true,
+    ownerTrustScore: "Top Lender · 45 Loans",
+    pricePerDay: 0,
+    priceDisplay: "Free",
+    depositDisplay: "Free with Student ID",
+    matchPct: 98,
+    matchReasons: [
+      "Available immediately",
+      "0.4 km away (CS Lab)",
+      "Like-new condition",
+      "Free student loan"
+    ],
+    description: "M2 Pro chip, 16GB unified memory, preinstalled with VS Code, Adobe Suite, and Python ML environment.",
+    cardColor: BRAND_COLORS.pastelYellow,
+    imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80",
+    mapCoords: { xPct: 22, yPct: 30 },
+  },
+  {
+    id: "res-calculator-texts",
+    name: "Casio FX-991EX & AI Textbooks",
+    category: "Books",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 0.6,
+    locationName: "Engineering Block B",
+    condition: "Excellent",
+    rating: 4.8,
+    ownerName: "Sarah Mehta",
+    ownerAvatar: "S",
+    isOwnerVerified: true,
+    ownerTrustScore: "Verified Student",
+    pricePerDay: 0,
+    priceDisplay: "Free",
+    depositDisplay: "Free with ID",
+    matchPct: 92,
+    matchReasons: [
+      "Available now",
+      "0.6 km away",
+      "Exam approved model",
+      "Includes reference notes"
+    ],
+    description: "High-resolution solar calculator approved for university exams + 3 core Artificial Intelligence hardcovers.",
+    cardColor: BRAND_COLORS.pastelMint,
+    imageUrl: "https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48d?w=600&auto=format&fit=crop&q=80",
+    mapCoords: { xPct: 58, yPct: 25 },
+  },
+  {
+    id: "res-projector-4k",
+    name: "HD 4K Portable Cinema Projector",
+    category: "Events",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 1.2,
+    locationName: "Media Lab · Student Center",
+    condition: "Excellent",
+    rating: 4.9,
+    ownerName: "Film Guild Exec",
+    ownerAvatar: "F",
+    isOwnerVerified: true,
+    ownerTrustScore: "Verified Campus Club",
+    pricePerDay: 150,
+    priceDisplay: "₹150/day",
+    depositDisplay: "₹300 deposit",
+    matchPct: 94,
+    matchReasons: [
+      "Available for weekend events",
+      "1.2 km away",
+      "High lumen brightness",
+      "Includes folding screen"
+    ],
+    description: "Ultra-bright 4K projection with HDMI/USB-C inputs, built-in Harman Kardon speakers, and 84-inch portable screen.",
+    cardColor: BRAND_COLORS.pastelLime,
+    imageUrl: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=600&auto=format&fit=crop&q=80",
+    mapCoords: { xPct: 75, yPct: 60 },
+  },
+  {
+    id: "res-yamaha-guitar",
+    name: "Yamaha F310 Acoustic Guitar",
+    category: "Music",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 1.8,
+    locationName: "Dorm B · Music Room",
+    condition: "Good",
+    rating: 4.7,
+    ownerName: "Chris Fernandez",
+    ownerAvatar: "C",
+    isOwnerVerified: true,
+    ownerTrustScore: "Verified Student",
+    pricePerDay: 80,
+    priceDisplay: "₹80/day",
+    depositDisplay: "₹200 deposit",
+    matchPct: 88,
+    matchReasons: [
+      "Available for loan",
+      "Fresh D'Addario strings",
+      "Includes padded gig bag",
+      "Digital tuner included"
+    ],
+    description: "Full-size acoustic guitar in rich natural finish. Comes with capo, picks, tuner, and waterproof gig bag.",
+    cardColor: BRAND_COLORS.pastelCoral,
+    mapCoords: { xPct: 45, yPct: 78 },
+  },
+  {
+    id: "res-shure-mic",
+    name: "Shure SM7B Studio Podcast Mic",
+    category: "Creative",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 1.4,
+    locationName: "Campus Radio Station",
+    condition: "New",
+    rating: 5.0,
+    ownerName: "Maya Lin",
+    ownerAvatar: "M",
+    isOwnerVerified: true,
+    ownerTrustScore: "Station Manager",
+    pricePerDay: 200,
+    priceDisplay: "₹200/day",
+    depositDisplay: "₹500 deposit",
+    matchPct: 91,
+    matchReasons: [
+      "Broadcasting standard mic",
+      "Includes Cloudlifter CL-1",
+      "XLR cable included",
+      "Desk boom arm included"
+    ],
+    description: "Industry-standard dynamic microphone ideal for podcasting, vocal recording, and voiceover work.",
+    cardColor: BRAND_COLORS.pastelLavender,
+    mapCoords: { xPct: 62, yPct: 52 },
+  },
+  {
+    id: "res-tennis-rackets",
+    name: "Wilson Pro Staff Tennis Rackets (Pair)",
+    category: "Sports",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 2.3,
+    locationName: "Sports Complex",
+    condition: "Good",
+    rating: 4.6,
+    ownerName: "Rohan Varma",
+    ownerAvatar: "R",
+    isOwnerVerified: true,
+    ownerTrustScore: "Sports Captain",
+    pricePerDay: 50,
+    priceDisplay: "₹50/day",
+    depositDisplay: "Free with ID",
+    matchPct: 85,
+    matchReasons: [
+      "Pair of 2 matching rackets",
+      "Includes 3 new tennis balls",
+      "Carrying case provided",
+      "Located at court entrance"
+    ],
+    description: "Matched pair of Wilson Pro Staff 97 graphite tennis rackets with comfortable overgrips.",
+    cardColor: BRAND_COLORS.pastelLime,
+    mapCoords: { xPct: 82, yPct: 38 },
+  },
+  {
+    id: "res-soldering-station",
+    name: "Digital Soldering & Electronics Kit",
+    category: "Tools",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 0.7,
+    locationName: "Robotics Lab · Block C",
+    condition: "Excellent",
+    rating: 4.9,
+    ownerName: "Kenji Sato",
+    ownerAvatar: "K",
+    isOwnerVerified: true,
+    ownerTrustScore: "Robotics Club Lead",
+    pricePerDay: 0,
+    priceDisplay: "Free",
+    depositDisplay: "Free with Lab Pass",
+    matchPct: 95,
+    matchReasons: [
+      "Temperature controlled iron",
+      "Solder sucker + lead-free wire",
+      "Multimeter included",
+      "0.7 km away"
+    ],
+    description: "Complete electronics prototyping station with ESD-safe mat, wire strippers, digital multimeter, and solder.",
+    cardColor: BRAND_COLORS.pastelYellow,
+    mapCoords: { xPct: 30, yPct: 68 },
+  },
+];
+
+export const SMART_ALTERNATIVES: CampusResource[] = [
+  {
+    id: "res-canon-bundle",
+    name: "Canon EOS R6 Mark II Creator Bundle",
+    category: "Photography",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 0.9,
+    locationName: "TSEC Campus · Media Wing",
+    condition: "Excellent",
+    rating: 4.8,
+    ownerName: "Karan Johar",
+    ownerAvatar: "K",
+    isOwnerVerified: true,
+    ownerTrustScore: "Verified Student Lenders",
+    pricePerDay: 100,
+    priceDisplay: "₹100/day",
+    depositDisplay: "₹300 deposit",
+    matchPct: 94,
+    matchReasons: [
+      "Available immediately (Good alternative)",
+      "0.9 km away",
+      "4K 60fps video capable",
+      "Includes EF-EOS R adapter"
+    ],
+    description: "Full-frame mirrorless camera with RF 24-105mm lens, dual SD slots, and Rhode shotgun mic.",
+    cardColor: BRAND_COLORS.pastelLavender,
+    mapCoords: { xPct: 40, yPct: 45 },
+    alternativeTo: "Sony Camera Kit"
+  },
+  {
+    id: "res-creator-bundle",
+    name: "Creator Mobile Studio & Tripod",
+    category: "Creative",
+    availability: "Available now",
+    isAvailableNow: true,
+    distanceKm: 1.1,
+    locationName: "Arts Building · Room 302",
+    condition: "Excellent",
+    rating: 4.9,
+    ownerName: "Aria Roy",
+    ownerAvatar: "A",
+    isOwnerVerified: true,
+    ownerTrustScore: "Top Rated Lender",
+    pricePerDay: 150,
+    priceDisplay: "₹150/day",
+    depositDisplay: "Free with ID",
+    matchPct: 89,
+    matchReasons: [
+      "Available now",
+      "Includes LED ring light",
+      "Wireless lapel mic included",
+      "Heavy duty aluminum tripod"
+    ],
+    description: "All-in-one vlogging kit with wireless dual lavalier microphones, LED light panel, and smartphone/camera mount.",
+    cardColor: BRAND_COLORS.pastelCoral,
+    mapCoords: { xPct: 52, yPct: 58 },
+    alternativeTo: "Sony Camera Kit"
+  }
+];
