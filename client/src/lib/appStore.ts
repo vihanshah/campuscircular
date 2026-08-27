@@ -579,88 +579,96 @@ export const INITIAL_LOANS: SharedLoan[] = [
 
 export const DEFAULT_CHAT_THREADS: SharedChatThread[] = [
   {
-    id: "thread-jordan",
-    partnerName: "Jordan (Film Guild)",
-    partnerRole: "Film Guild Exec",
-    partnerAvatar: "J",
+    id: "thread-general",
+    partnerName: "📢 Campus Open Gear Lounge",
+    partnerRole: "Public Student Lounge",
+    partnerAvatar: "💬",
     avatarBg: "#FFD928",
-    itemBadge: "Sony 4K Camera",
-    handoverLocation: "Media Lab · TSEC Campus",
-    lastMessage: "... finish filming with the Sony Alpha 4K camera today, ready for drop-off at Media Lab by 2pm!",
-    lastTime: "14:00 Today",
+    itemBadge: "Open Campus Lounge",
+    handoverLocation: "TSEC Main Campus",
+    lastMessage: "Aarav: Welcome to the Open Campus Gear Lounge!",
+    lastTime: "Just now",
     messages: [
       {
         id: "m1",
-        senderId: "CC1007",
-        senderName: "Jordan (Film Guild)",
+        senderId: "CC1001",
+        senderName: "Aarav Sharma (CS)",
         sender: "partner",
-        text: "Hey! I'm finishing filming with the Sony Alpha 4K camera today, ready for drop-off at Media Lab by 2pm!",
-        timestamp: "14:00 Today",
+        text: "Hey everyone! Welcome to the open campus gear lounge. Feel free to request or share any equipment here!",
+        timestamp: "10:00 AM",
       },
       {
         id: "m2",
-        senderId: "CC1003",
-        senderName: "Rohan Mehta",
-        sender: "you",
-        text: "Awesome! I'll be near the Media Lab after my 1:30 PM lecture.",
-        timestamp: "14:05 Today",
+        senderId: "CC1004",
+        senderName: "Priya Nair (Media)",
+        sender: "partner",
+        text: "Does anyone have a 4K camera tripod available near the Media Lab for a film shoot today?",
+        timestamp: "11:30 AM",
       },
-    ],
-  },
-  {
-    id: "thread-you",
-    partnerName: "Engineering Lab Admin",
-    partnerRole: "Lab Tech",
-    partnerAvatar: "R",
-    avatarBg: "#D7F3EB",
-    itemBadge: "Scientific Calculator",
-    handoverLocation: "Engineering Block B",
-    lastMessage: "Confirmed! Returning Scientific Calculator to Engineering Block B right after my lecture.",
-    lastTime: "1h ago",
-    messages: [
       {
         id: "m3",
         senderId: "CC1003",
-        senderName: "Rohan Mehta",
+        senderName: "Rohan Mehta (Mech)",
         sender: "you",
-        text: "Confirmed! Returning Scientific Calculator to Engineering Block B right after my lecture.",
-        timestamp: "1h ago",
-      },
-      {
-        id: "m4",
-        senderId: "CC1001",
-        senderName: "Engineering Lab Admin",
-        sender: "partner",
-        text: "Thanks! Drop it off at Counter 3 with the lab assistant.",
-        timestamp: "55m ago",
+        text: "I have a Canon EOS DSLR kit and scientific calculator ready for drop-off at Engineering Block B!",
+        timestamp: "12:15 PM",
       },
     ],
   },
   {
-    id: "thread-alex",
-    partnerName: "Alex Rivera (Cinema Guild)",
-    partnerRole: "Cinema Lead",
-    partnerAvatar: "A",
+    id: "thread-photo",
+    partnerName: "📷 Photography & Film Circle",
+    partnerRole: "Alex Rivera & Priya Nair",
+    partnerAvatar: "📷",
+    avatarBg: "#E8DEF8",
+    itemBadge: "Sony 4K & DSLR",
+    handoverLocation: "Media Lab · TSEC Campus",
+    lastMessage: "Alex: Handover for Sony 4K Camera is confirmed at Media Lab counter.",
+    lastTime: "1h ago",
+    messages: [
+      {
+        id: "m4",
+        senderId: "CC1007",
+        senderName: "Alex Rivera (Cinema)",
+        sender: "partner",
+        text: "Handover for Sony 4K Camera is confirmed at Media Lab counter for today's shoot!",
+        timestamp: "1h ago",
+      },
+      {
+        id: "m5",
+        senderId: "CC1004",
+        senderName: "Priya Nair (Media)",
+        sender: "partner",
+        text: "Perfect! I'll bring the memory card and spare batteries.",
+        timestamp: "45m ago",
+      },
+    ],
+  },
+  {
+    id: "thread-music",
+    partnerName: "🎸 Music & Jam Sessions Lounge",
+    partnerRole: "Vikram Joshi & Tanmay Bhatia",
+    partnerAvatar: "🎸",
     avatarBg: "#FF6755",
-    itemBadge: "Acoustic Guitar",
-    handoverLocation: "Student Center",
-    lastMessage: "... meet tomorrow at Student Center to pick up the Yamaha Acoustic Guitar for Friday Jam session!",
+    itemBadge: "Yamaha Acoustic Guitar",
+    handoverLocation: "Student Center Quad",
+    lastMessage: "Vikram: Meeting tomorrow at Student Center for Friday Jam session!",
     lastTime: "3h ago",
     messages: [
       {
-        id: "m5",
-        senderId: "CC1007",
-        senderName: "Alex Rivera",
+        id: "m6",
+        senderId: "CC1008",
+        senderName: "Vikram Joshi (Music)",
         sender: "partner",
-        text: "Hey! Let me know if you can meet tomorrow at Student Center to pick up the Yamaha Acoustic Guitar for Friday Jam session!",
+        text: "Meeting tomorrow at Student Center to share the Yamaha Acoustic Guitar for Friday Jam session!",
         timestamp: "3h ago",
       },
       {
-        id: "m6",
-        senderId: "CC1003",
-        senderName: "Rohan Mehta",
-        sender: "you",
-        text: "Sounds great! Is 4:00 PM fine?",
+        id: "m7",
+        senderId: "CC1010",
+        senderName: "Tanmay Bhatia (AI)",
+        sender: "partner",
+        text: "Awesome! I'll bring the Shure podcast mic as well.",
         timestamp: "2h ago",
       },
     ],
@@ -677,7 +685,12 @@ export function loadAppStore(): AppStoreData {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && Array.isArray(parsed.users) && parsed.users.length >= 10) {
-        if (!parsed.chatThreads || !Array.isArray(parsed.chatThreads) || parsed.chatThreads.length === 0) {
+        if (
+          !parsed.chatThreads ||
+          !Array.isArray(parsed.chatThreads) ||
+          parsed.chatThreads.length === 0 ||
+          parsed.chatThreads[0]?.id === "thread-jordan"
+        ) {
           parsed.chatThreads = DEFAULT_CHAT_THREADS;
         }
         return parsed;
@@ -1002,10 +1015,11 @@ export function sendChatMessageInStore(threadId: string, text: string): SharedCh
 
   const nowFormatted = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
 
+  const deptShort = currentUser.department.split(" ")[0];
   const newMsg: SharedChatMessage = {
     id: `msg-${Date.now()}`,
     senderId: currentUser.id,
-    senderName: currentUser.name,
+    senderName: `${currentUser.name} (${deptShort})`,
     sender: "you",
     text: text.trim(),
     timestamp: nowFormatted,
