@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 export interface GooeyNavItem {
   label: string;
   href?: string;
-  onClick?: () => void;
+  id?: string;
 }
 
 export interface GooeyNavProps {
@@ -15,9 +15,10 @@ export interface GooeyNavProps {
   timeVariance?: number;
   colors?: number[];
   initialActiveIndex?: number;
+  onSelect?: (index: number, item: GooeyNavItem) => void;
 }
 
-const GooeyNav: React.FC<GooeyNavProps> = ({
+export const GooeyNav: React.FC<GooeyNavProps> = ({
   items,
   animationTime = 600,
   particleCount = 15,
@@ -25,13 +26,19 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   particleR = 100,
   timeVariance = 300,
   colors = [1, 2, 3, 1, 2, 3, 1, 4],
-  initialActiveIndex = -1 // No default selection for prompts
+  initialActiveIndex = 0,
+  onSelect
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLUListElement>(null);
   const filterRef = useRef<HTMLSpanElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(initialActiveIndex);
+
+  // Sync activeIndex if initialActiveIndex prop changes
+  useEffect(() => {
+    setActiveIndex(initialActiveIndex);
+  }, [initialActiveIndex]);
 
   const noise = (n = 1) => n / 2 - Math.random() * n;
   const getXY = (distance: number, pointIndex: number, totalPoints: number): [number, number] => {
@@ -68,7 +75,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
         particle.style.setProperty('--end-y', `${p.end[1]}px`);
         particle.style.setProperty('--time', `${p.time}ms`);
         particle.style.setProperty('--scale', `${p.scale}`);
-        particle.style.setProperty('--color', `var(--color-${p.color}, #c8f54e)`);
+        particle.style.setProperty('--color', `var(--color-${p.color}, #B92CFF)`);
         particle.style.setProperty('--rotate', `${p.rotate}deg`);
         point.classList.add('point');
         particle.appendChild(point);
@@ -98,18 +105,18 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     Object.assign(textRef.current.style, styles);
     textRef.current.innerText = element.innerText;
   };
-  
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+  const handleClick = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.preventDefault();
-    const liEl = e.currentTarget.parentElement;
-    if (!liEl) return;
-    
+    const liEl = e.currentTarget;
+    if (activeIndex === index) return;
     setActiveIndex(index);
+    if (onSelect) {
+      onSelect(index, items[index]);
+    }
     updateEffectPosition(liEl);
-    
     if (filterRef.current) {
       const particles = filterRef.current.querySelectorAll('.particle');
-      particles.forEach(p => filterRef.current!.removeChild(p));
+      particles.forEach((p) => filterRef.current!.removeChild(p));
     }
     if (textRef.current) {
       textRef.current.classList.remove('active');
@@ -119,21 +126,33 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     if (filterRef.current) {
       makeParticles(filterRef.current);
     }
-
-    if (items[index].onClick) {
-      items[index].onClick!();
-    }
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLAnchorElement>, index: number) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>, index: number) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      handleClick(e as any, index);
+      const liEl = e.currentTarget;
+      if (activeIndex === index) return;
+      setActiveIndex(index);
+      if (onSelect) {
+        onSelect(index, items[index]);
+      }
+      updateEffectPosition(liEl);
+      if (filterRef.current) {
+        const particles = filterRef.current.querySelectorAll('.particle');
+        particles.forEach((p) => filterRef.current!.removeChild(p));
+      }
+      if (textRef.current) {
+        textRef.current.classList.remove('active');
+        void textRef.current.offsetWidth;
+        textRef.current.classList.add('active');
+      }
+      if (filterRef.current) {
+        makeParticles(filterRef.current);
+      }
     }
   };
-
   useEffect(() => {
-    if (!navRef.current || !containerRef.current || activeIndex === -1) return;
+    if (!navRef.current || !containerRef.current) return;
     const activeLi = navRef.current.querySelectorAll('li')[activeIndex] as HTMLElement;
     if (activeLi) {
       updateEffectPosition(activeLi);
@@ -147,87 +166,99 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     });
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, [activeIndex]);
+  }, [activeIndex, items]);
 
   return (
     <>
       <style>
         {`
           :root {
-            --color-1: #c8f54e;
-            --color-2: #e2f98f;
-            --color-3: #f1fcc7;
-            --color-4: #a3d922;
             --linear-ease: linear(0, 0.068, 0.19 2.7%, 0.804 8.1%, 1.037, 1.199 13.2%, 1.245, 1.27 15.8%, 1.274, 1.272 17.4%, 1.249 19.1%, 0.996 28%, 0.949, 0.928 33.3%, 0.926, 0.933 36.8%, 1.001 45.6%, 1.013, 1.019 50.8%, 1.018 54.4%, 1 63.1%, 0.995 68%, 1.001 85%, 1);
+            --color-1: #151518;
+            --color-2: #B92CFF;
+            --color-3: #FFD928;
+            --color-4: #34D399;
           }
-          .effect {
+          .dark {
+            --color-1: #00F2FE;
+            --color-2: #FFD928;
+            --color-3: #34D399;
+            --color-4: #B92CFF;
+          }
+          .gooey-nav-container .effect {
             position: absolute;
             opacity: 1;
             pointer-events: none;
             display: grid;
             place-items: center;
             z-index: 1;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
           }
-          .effect.text {
-            display: none;
-            opacity: 0;
-            visibility: hidden;
+          .gooey-nav-container .effect.text {
+            color: #151515;
+            transition: color 0.3s ease;
           }
-          .effect.text.active {
-            display: none;
+          .dark .gooey-nav-container .effect.text {
+            color: #FFFFFF;
           }
-          .effect.filter {
-            filter: blur(4px) contrast(100) blur(0);
-            mix-blend-mode: darken;
+          .gooey-nav-container .effect.text.active {
+            color: #FFFDF7;
           }
-          .effect.filter::before {
-            content: "";
-            position: absolute;
-            inset: -40px;
-            z-index: -2;
-            background: transparent;
+          .dark .gooey-nav-container .effect.text.active {
+            color: #0F0F14;
           }
-          .effect.filter::after {
+          .gooey-nav-container .effect.filter {
+            filter: blur(5px) contrast(40) blur(0);
+            mix-blend-mode: normal;
+          }
+          .gooey-nav-container .effect.filter::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: #c8f54e;
+            background: #151518;
             transform: scale(0);
             opacity: 0;
             z-index: -1;
             border-radius: 9999px;
           }
-          .effect.active::after {
-            animation: pill 0.3s ease both;
+          .dark .gooey-nav-container .effect.filter::after {
+            background: #00F2FE;
           }
-          @keyframes pill {
+          .gooey-nav-container .effect.active::after {
+            animation: goo-pill 0.3s ease both;
+          }
+          @keyframes goo-pill {
             to {
               transform: scale(1);
               opacity: 1;
             }
           }
-          .particle,
-          .point {
+          .gooey-nav-container .particle,
+          .gooey-nav-container .point {
             display: block;
             opacity: 0;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 9999px;
             transform-origin: center;
           }
-          .particle {
+          .gooey-nav-container .particle {
             --time: 5s;
             position: absolute;
-            top: calc(50% - 6px);
-            left: calc(50% - 6px);
-            animation: particle calc(var(--time)) ease 1 -350ms;
+            top: calc(50% - 7px);
+            left: calc(50% - 7px);
+            animation: goo-particle calc(var(--time)) ease 1 -350ms;
           }
-          .point {
+          .gooey-nav-container .point {
             background: var(--color);
             opacity: 1;
-            animation: point calc(var(--time)) ease 1 -350ms;
+            animation: goo-point calc(var(--time)) ease 1 -350ms;
           }
-          @keyframes particle {
+          @keyframes goo-particle {
             0% {
               transform: rotate(0deg) translate(calc(var(--start-x)), calc(var(--start-y)));
               opacity: 1;
@@ -247,7 +278,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
               opacity: 1;
             }
           }
-          @keyframes point {
+          @keyframes goo-point {
             0% {
               transform: scale(0);
               opacity: 0;
@@ -273,50 +304,62 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
               opacity: 0;
             }
           }
-          li.active {
-            color: #1a1a1a;
-            border-color: #c8f54e;
+          .gooey-nav-container li.goo-active {
+            color: #FFFDF7 !important;
           }
-          li.active::after {
+          .dark .gooey-nav-container li.goo-active {
+            color: #0F0F14 !important;
+          }
+          .gooey-nav-container li.goo-active::after {
             opacity: 1;
             transform: scale(1);
           }
-          li::after {
+          .gooey-nav-container li::after {
             content: "";
             position: absolute;
             inset: 0;
             border-radius: 9999px;
-            background: #c8f54e;
+            background: #151518;
             opacity: 0;
             transform: scale(0);
             transition: all 0.3s ease;
             z-index: -1;
           }
+          .dark .gooey-nav-container li::after {
+            background: #00F2FE;
+          }
         `}
       </style>
-      <div className="relative w-full" ref={containerRef}>
-        <nav className="flex relative w-full" style={{ transform: 'translate3d(0,0,0.01px)' }}>
+      <div className="relative gooey-nav-container overflow-x-auto no-scrollbar py-1" ref={containerRef}>
+        <nav className="flex relative w-max" style={{ transform: 'translate3d(0,0,0.01px)' }}>
           <ul
             ref={navRef}
-            className="flex flex-wrap gap-2 list-none p-0 m-0 relative z-[3] w-full"
+            className="flex gap-2 list-none p-0 m-0 relative z-[3]"
           >
-            {items.map((item, index) => (
-              <li
-                key={index}
-                className={`text-[10px] font-mono border border-[#e8e4df] rounded-full text-[#1a1a1a]/60 hover:border-[#c8f54e] hover:text-[#1a1a1a] transition-all relative cursor-pointer ${
-                  activeIndex === index ? 'active !text-[#1a1a1a]' : ''
-                }`}
-              >
-                <a
-                  href={item.href || '#'}
-                  onClick={e => handleClick(e, index)}
-                  onKeyDown={e => handleKeyDown(e, index)}
-                  className="outline-none py-[0.6em] px-[1em] inline-block"
+            {items.map((item, index) => {
+              const isSelected = activeIndex === index;
+              return (
+                <li
+                  key={item.id || item.label || index}
+                  onClick={(e) => handleClick(e, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  tabIndex={0}
+                  className={`rounded-full relative cursor-pointer font-extrabold text-xs uppercase tracking-wider px-4 py-2 transition-all duration-300 ease ${
+                    isSelected
+                      ? 'goo-active bg-[#151518] text-[#FFFDF7] dark:bg-[#00F2FE] dark:text-[#0F0F14] shadow-xs'
+                      : 'bg-[#F3EFE6] text-[#151515]/75 hover:text-[#151515] hover:bg-[#E8E4DA] dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20'
+                  }`}
                 >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+                  <a
+                    href={item.href || '#'}
+                    onClick={(e) => e.preventDefault()}
+                    className="outline-none inline-block whitespace-nowrap"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
         <span className="effect filter" ref={filterRef} />
