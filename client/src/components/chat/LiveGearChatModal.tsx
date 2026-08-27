@@ -41,6 +41,8 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
     setInputText("");
   };
 
+  const currentStudentId = (currentUser.id || currentUser.studentId || "").toLowerCase();
+
   return (
     <AnimatePresence>
       <motion.div
@@ -104,17 +106,20 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
             </div>
 
             {activeThread.messages.map((msg) => {
-              const isMe = msg.senderId === currentUser.id || msg.sender === "you";
+              const msgSenderId = (msg.senderId || "").toLowerCase();
+              const isMe = currentStudentId !== "" && msgSenderId === currentStudentId;
+
               return (
                 <div
                   key={msg.id}
                   className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
                 >
-                  {!isMe && msg.senderName && (
-                    <span className="text-[10px] font-extrabold text-[#151515]/60 mb-0.5 px-1">
-                      {msg.senderName}
+                  {!isMe && (
+                    <span className="text-[10px] font-black text-[#151515]/60 mb-1 px-1">
+                      {msg.senderName || "Campus Peer"}
                     </span>
                   )}
+
                   <div
                     className={`max-w-[80%] p-3.5 rounded-2xl text-xs font-semibold leading-relaxed shadow-xs ${
                       isMe
@@ -127,7 +132,7 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
 
                   <div className="flex items-center gap-1 mt-1 px-1 text-[10px] font-mono text-[#151515]/40">
                     <span>{msg.timestamp}</span>
-                    {isMe && <CheckCheck className="w-3 h-3 text-[#34D399]" />}
+                    {isMe && <CheckCheck className="w-3.5 h-3.5 text-[#34D399]" />}
                   </div>
                 </div>
               );
@@ -144,7 +149,7 @@ export const LiveGearChatModal: React.FC<LiveGearChatModalProps> = ({
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={`Message as ${currentUser.name.split(" ")[0]}...`}
+              placeholder={`Message as ${currentUser.name.split(" ")[0]} (${currentUser.id})...`}
               className="flex-1 bg-[#F8F6F0] border border-[#151515]/10 rounded-2xl px-4 py-2.5 text-xs font-semibold text-[#151515] placeholder:text-[#151515]/40 focus:outline-none focus:ring-2 focus:ring-[#FFD928] transition-all"
             />
 
