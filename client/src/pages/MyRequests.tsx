@@ -32,7 +32,7 @@ export default function MyRequests() {
   );
 
   const outgoingRequests = store.requests.filter(
-    (req) => req.requesterId === currentUser.id || req.requesterId === currentUser.studentId || store.requests.length <= 1
+    (req) => req.requesterId === currentUser.id || req.requesterId === currentUser.studentId
   );
 
   return (

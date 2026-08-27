@@ -23,7 +23,7 @@ import { SmartAlternatives } from "@/components/discover/SmartAlternatives";
 import { EmptyState } from "@/components/discover/EmptyState";
 import { AiAssistModal } from "@/components/discover/AiAssistModal";
 import { ResourceDetailsModal } from "@/components/discover/ResourceDetailsModal";
-import { loadAppStore } from "@/lib/appStore";
+import { loadAppStore, useAppStore } from "@/lib/appStore";
 
 const CATEGORIES = [
   { id: "All", label: "All" },
@@ -46,6 +46,7 @@ const SORT_OPTIONS = [
 ] as const;
 
 export default function Discover() {
+  const store = useAppStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>(() => {
     try {
@@ -98,9 +99,8 @@ export default function Discover() {
 
   // Filtered & Sorted Resource Calculation
   const filteredResources = useMemo(() => {
-    const store = loadAppStore();
-    const allResources = store.resources;
-    return allResources.filter((res) => {
+    const allResources: CampusResource[] = store.resources as any;
+    return allResources.filter((res: CampusResource) => {
       // Search Query
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -140,14 +140,14 @@ export default function Discover() {
       if (filters.trust === "Verified owners" && !res.isOwnerVerified) return false;
 
       return true;
-    }).sort((a, b) => {
+    }).sort((a: CampusResource, b: CampusResource) => {
       if (sortBy === "Nearest") return a.distanceKm - b.distanceKm;
       if (sortBy === "Lowest Price") return a.pricePerDay - b.pricePerDay;
       if (sortBy === "Highest Rated") return b.rating - a.rating;
       // Default: Best Match
       return b.matchPct - a.matchPct;
     });
-  }, [searchQuery, selectedCategory, filters, sortBy]);
+  }, [store.resources, searchQuery, selectedCategory, filters, sortBy]);
 
   const handleRequestBorrow = () => {
     if (selectedResource) {
@@ -342,7 +342,7 @@ export default function Discover() {
               <>
                 {filteredResources.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {filteredResources.map((res) => (
+                    {filteredResources.map((res: CampusResource) => (
                       <ResourceCard
                         key={res.id}
                         resource={res}
