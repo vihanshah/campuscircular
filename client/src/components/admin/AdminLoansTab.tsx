@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Clock, CheckCircle2, AlertTriangle, Send, Search, Filter, ShieldCheck, FileText, X, Repeat, ArrowRight } from "lucide-react";
 import { loadAppStore, saveAppStore, SharedLoan, useAppStore } from "@/lib/appStore";
+import { CountUp } from "@/components/ui/CountUp";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export const AdminLoansTab: React.FC = () => {
   const store = useAppStore();
@@ -58,17 +60,17 @@ export const AdminLoansTab: React.FC = () => {
     {
       id: "loan-d4",
       requestId: "req-4",
-      resourceId: "res-projector",
-      resourceName: "HD 4K Portable Cinema Projector",
-      category: "Events",
-      borrowerId: "CC1002",
-      borrowerName: "Ananya Verma",
-      ownerId: "CC1004",
-      ownerName: "Priya Nair",
+      resourceId: "res-calculator",
+      resourceName: "Casio FX-991EX Scientific Calculator",
+      category: "Academic",
+      borrowerId: "CC1006",
+      borrowerName: "Diya Sengupta",
+      ownerId: "CC1003",
+      ownerName: "Rohan Mehta",
       dueDate: "Sep 03, 2026",
       dueDaysText: "Due in 7 days",
       status: "ACTIVE",
-      cardColor: "#FDF0A6",
+      cardColor: "#FEE2E2",
     },
     {
       id: "loan-d5",
@@ -76,34 +78,21 @@ export const AdminLoansTab: React.FC = () => {
       resourceId: "res-guitar",
       resourceName: "Yamaha F310 Acoustic Guitar",
       category: "Music",
-      borrowerId: "CC1010",
-      borrowerName: "Tanmay Bhatia",
-      ownerId: "CC1008",
-      ownerName: "Vikram Joshi",
-      dueDate: "Aug 29, 2026",
-      dueDaysText: "Due in 2 days",
-      status: "ACTIVE",
-      cardColor: "#E8DEF8",
-    },
-    {
-      id: "loan-d6",
-      requestId: "req-6",
-      resourceId: "res-shure-mic",
-      resourceName: "Shure SM7B Studio Podcast Mic",
-      category: "Music",
-      borrowerId: "CC1006",
-      borrowerName: "Diya Sengupta",
-      ownerId: "CC1002",
-      ownerName: "Ananya Verma",
-      dueDate: "Aug 28, 2026",
-      dueDaysText: "Due tomorrow",
-      status: "DUE_SOON",
-      cardColor: "#FDF0A6",
+      borrowerId: "CC1008",
+      borrowerName: "Vikram Joshi",
+      ownerId: "CC1004",
+      ownerName: "Priya Nair",
+      dueDate: "Aug 27, 2026",
+      dueDaysText: "Returned Today",
+      status: "RETURNED",
+      cardColor: "#E2F1D0",
     },
   ];
 
-  // Merge store loans with demo loans (avoid duplicates)
-  const allLoans = [...store.loans, ...demoLoans.filter((d) => !store.loans.some((l) => l.id === d.id))];
+  const storeLoans = store.loans || [];
+  const allLoansMap = new Map<string, SharedLoan>();
+  [...demoLoans, ...storeLoans].forEach((l) => allLoansMap.set(l.id, l));
+  const allLoans = Array.from(allLoansMap.values());
 
   const filteredLoans = allLoans.filter((loan) => {
     const matchesSearch =
@@ -115,7 +104,7 @@ export const AdminLoansTab: React.FC = () => {
 
     const matchesStatus =
       statusFilter === "ALL" ||
-      (statusFilter === "ACTIVE" && loan.status === "ACTIVE") ||
+      (statusFilter === "ACTIVE" && loan.status !== "RETURNED") ||
       (statusFilter === "DUE_SOON" && loan.status === "DUE_SOON") ||
       (statusFilter === "RETURNED" && loan.status === "RETURNED");
 
@@ -139,31 +128,39 @@ export const AdminLoansTab: React.FC = () => {
 
   return (
     <div className="space-y-6 text-white font-sans">
-      {/* SUMMARY INDICATORS ROW */}
+      {/* SUMMARY INDICATORS ROW WITH REACT BITS SPOTLIGHT & COUNT UP */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#1A1A24] border border-white/10 p-5 rounded-3xl space-y-1">
+        <SpotlightCard spotlightColor="rgba(0, 242, 254, 0.15)" className="p-5 space-y-1">
           <div className="text-[10px] font-mono uppercase text-white/50">Active Loans</div>
-          <div className="text-3xl font-black text-[#00F2FE]">{allLoans.filter((l) => l.status !== "RETURNED").length}</div>
+          <div className="text-3xl font-black text-[#00F2FE]">
+            <CountUp to={allLoans.filter((l) => l.status !== "RETURNED").length} />
+          </div>
           <div className="text-[10px] text-white/60">Live across campus</div>
-        </div>
+        </SpotlightCard>
 
-        <div className="bg-[#1A1A24] border border-white/10 p-5 rounded-3xl space-y-1">
+        <SpotlightCard spotlightColor="rgba(255, 217, 40, 0.15)" className="p-5 space-y-1">
           <div className="text-[10px] font-mono uppercase text-white/50">Due Within 48h</div>
-          <div className="text-3xl font-black text-[#FFD928]">{allLoans.filter((l) => l.status === "DUE_SOON").length}</div>
+          <div className="text-3xl font-black text-[#FFD928]">
+            <CountUp to={allLoans.filter((l) => l.status === "DUE_SOON").length} />
+          </div>
           <div className="text-[10px] text-amber-300">Automated SMS queued</div>
-        </div>
+        </SpotlightCard>
 
-        <div className="bg-[#1A1A24] border border-white/10 p-5 rounded-3xl space-y-1">
+        <SpotlightCard spotlightColor="rgba(52, 211, 153, 0.15)" className="p-5 space-y-1">
           <div className="text-[10px] font-mono uppercase text-white/50">Returned Loans</div>
-          <div className="text-3xl font-black text-[#34D399]">142</div>
+          <div className="text-3xl font-black text-[#34D399]">
+            <CountUp to={142} />
+          </div>
           <div className="text-[10px] text-[#34D399]">100% Escrow Returned</div>
-        </div>
+        </SpotlightCard>
 
-        <div className="bg-[#1A1A24] border border-white/10 p-5 rounded-3xl space-y-1">
+        <SpotlightCard spotlightColor="rgba(185, 44, 255, 0.15)" className="p-5 space-y-1">
           <div className="text-[10px] font-mono uppercase text-white/50">On-Time Return Pct</div>
-          <div className="text-3xl font-black text-[#B92CFF]">98.4%</div>
+          <div className="text-3xl font-black text-[#B92CFF]">
+            <CountUp to={98.4} decimals={1} suffix="%" />
+          </div>
           <div className="text-[10px] text-white/60">Verified Trust Score</div>
-        </div>
+        </SpotlightCard>
       </div>
 
       {/* HEADER BAR */}

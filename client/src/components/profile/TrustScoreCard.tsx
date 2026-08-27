@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, Check, Sparkles, HeartHandshake } from "lucide-react";
 import { StudentProfile } from "@/lib/profileData";
+import { CountUp } from "@/components/ui/CountUp";
+import { ShinyText } from "@/components/ui/ShinyText";
 
 interface TrustScoreCardProps {
   profile: StudentProfile;
@@ -19,8 +21,8 @@ export const TrustScoreCard: React.FC<TrustScoreCardProps> = ({ profile }) => {
           </h3>
         </div>
 
-        <span className="text-[10px] font-black uppercase tracking-wider bg-[#E2F1D0] text-[#15803D] px-2.5 py-1 rounded-full">
-          HIGH TRUST
+        <span className="text-[10px] font-black uppercase tracking-wider bg-[#151518] text-[#34D399] px-3 py-1 rounded-full border border-white/10 shadow-xs">
+          <ShinyText text="HIGH TRUST VERIFIED" />
         </span>
       </div>
 
@@ -55,7 +57,7 @@ export const TrustScoreCard: React.FC<TrustScoreCardProps> = ({ profile }) => {
 
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             <span className="text-3xl font-black text-[#151515] leading-none">
-              {profile.trustScore}
+              <CountUp to={profile.trustScore} />
             </span>
             <span className="text-[9px] font-extrabold uppercase text-[#151515]/50 tracking-wider mt-0.5">
               Score
