@@ -136,26 +136,47 @@ html {
 }
 
 /* Master Dark Mode Overrides for Student Dashboard & Pages */
-.dark {
+.dark,
+.dark html,
+.dark body,
+.dark #root {
   color-scheme: dark;
   background-color: #0F0F14 !important;
   color: #FFFDF7 !important;
 }
 
-.dark body {
+/* Whole Page Container Wrappers */
+.dark .min-h-screen,
+.dark .bg-\[\#F6F6F9\],
+.dark .bg-\[\#FFFDF7\],
+.dark .bg-\[\#F8F6F0\],
+.dark .bg-\[\#FAF9F6\],
+.dark .bg-\[\#F3EFE6\],
+.dark .bg-gray-50,
+.dark .bg-slate-50,
+.dark .bg-zinc-50 {
   background-color: #0F0F14 !important;
   color: #FFFDF7 !important;
 }
 
-.dark .bg-\[\#FFFDF7\],
-.dark .bg-\[\#F8F6F0\],
-.dark .bg-\[\#F3EFE6\],
-.dark .bg-white {
-  background-color: #191923 !important;
+/* Card & Component Backgrounds */
+.dark .bg-white,
+.dark div.bg-\[\#FFFDF7\],
+.dark div.bg-\[\#F8F6F0\],
+.dark div.bg-\[\#F3EFE6\] {
+  background-color: #181824 !important;
   color: #FFFDF7 !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
+/* Editorial Black Hero Cards - Inverted for Dark Mode contrast */
+.dark .bg-\[\#151518\] {
+  background-color: #1C1C28 !important;
+  border-color: rgba(0, 242, 254, 0.3) !important;
+}
+
+/* Typography Overrides */
 .dark .text-\[\#151515\],
 .dark .text-\[\#151518\] {
   color: #FFFDF7 !important;
@@ -166,7 +187,8 @@ html {
 .dark .text-\[\#151515\]\/80,
 .dark .text-\[\#151515\]\/50,
 .dark .text-gray-500,
-.dark .text-gray-600 {
+.dark .text-gray-600,
+.dark .text-slate-500 {
   color: rgba(255, 253, 247, 0.7) !important;
 }
 
@@ -178,10 +200,42 @@ html {
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
+/* Neon Accent UI Pill Color Transformation for Dark Mode */
+.dark .bg-\[\#FDF0A6\] {
+  background-color: rgba(255, 217, 40, 0.22) !important;
+  color: #FFD928 !important;
+  border: 1px solid rgba(255, 217, 40, 0.4) !important;
+}
+
+.dark .bg-\[\#D7F3EB\] {
+  background-color: rgba(52, 211, 153, 0.22) !important;
+  color: #34D399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.4) !important;
+}
+
+.dark .bg-\[\#E8DEF8\] {
+  background-color: rgba(185, 44, 255, 0.22) !important;
+  color: #E9D5FF !important;
+  border: 1px solid rgba(185, 44, 255, 0.4) !important;
+}
+
+.dark .bg-\[\#E2F1D0\] {
+  background-color: rgba(216, 255, 50, 0.22) !important;
+  color: #D8FF32 !important;
+  border: 1px solid rgba(216, 255, 50, 0.4) !important;
+}
+
+.dark .bg-\[\#FEE2E2\] {
+  background-color: rgba(248, 113, 113, 0.22) !important;
+  color: #F87171 !important;
+  border: 1px solid rgba(248, 113, 113, 0.4) !important;
+}
+
+/* Form Controls */
 .dark input,
 .dark select,
 .dark textarea {
-  background-color: #12121A !important;
+  background-color: #101018 !important;
   color: #FFFDF7 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
