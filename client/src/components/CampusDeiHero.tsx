@@ -24,57 +24,139 @@ export const CampusDeiHero: React.FC = () => {
   const firstName = currentUser.name.split(" ")[0] || "Student";
   const [isCircleModalOpen, setIsCircleModalOpen] = useState(false);
 
-  // Find dynamic active requests or fallback demo student partner
-  const userRequest = store.requests.find(
-    (r) => r.requesterId === currentUser.id || r.requesterId === currentUser.studentId
-  );
-  const userLoan = store.loans.find(
-    (l) => l.borrowerId === currentUser.id || l.borrowerId === currentUser.studentId
-  );
+  // Derive unique, customized exchange details for each student ID
+  const studentId = currentUser.id || currentUser.studentId || "CC1003";
 
-  const borrowItemName = userRequest ? userRequest.resourceName : "Sony 4K Camera";
-  const returnItemName = userLoan ? userLoan.resourceName : "Casio Scientific Calculator";
+  // Dynamic mapping per student account
+  const studentConfigMap: Record<string, {
+    partnerId: string;
+    borrowItem: string;
+    returnItem: string;
+    shareItem: string;
+    circlePartnerIds: [string, string, string];
+  }> = {
+    CC1001: {
+      partnerId: "CC1004", // Priya Nair
+      borrowItem: "Sony Alpha A7 IV 4K Camera",
+      returnItem: "Casio Scientific Calculator",
+      shareItem: "MacBook Pro M2",
+      circlePartnerIds: ["CC1004", "CC1007", "CC1006"],
+    },
+    CC1002: {
+      partnerId: "CC1001", // Aarav Sharma
+      borrowItem: "MacBook Pro M2 (16GB RAM)",
+      returnItem: "HD 4K Cinema Projector",
+      shareItem: "Wacom Intuos Drawing Tablet",
+      circlePartnerIds: ["CC1001", "CC1004", "CC1010"],
+    },
+    CC1003: {
+      partnerId: "CC1007", // Alex Rivera
+      borrowItem: "Canon EOS Rebel DSLR Kit",
+      returnItem: "Casio FX-991EX Calculator",
+      shareItem: "Digital Vernier Caliper Set",
+      circlePartnerIds: ["CC1007", "CC1006", "CC1005"],
+    },
+    CC1004: {
+      partnerId: "CC1008", // Vikram Joshi
+      borrowItem: "Yamaha F310 Acoustic Guitar",
+      returnItem: "HD 4K Cinema Projector",
+      shareItem: "Sony Alpha A7 IV 4K Camera",
+      circlePartnerIds: ["CC1008", "CC1001", "CC1007"],
+    },
+    CC1005: {
+      partnerId: "CC1010", // Tanmay Bhatia
+      borrowItem: "Arduino Robotics Starter Kit",
+      returnItem: "Digital Oscilloscope",
+      shareItem: "Soldering Workstation",
+      circlePartnerIds: ["CC1010", "CC1003", "CC1009"],
+    },
+    CC1006: {
+      partnerId: "CC1003", // Rohan Mehta
+      borrowItem: "MacBook Pro M2 (16GB RAM)",
+      returnItem: "Casio FX-991EX Calculator",
+      shareItem: "Linear Algebra Textbook Vol 2",
+      circlePartnerIds: ["CC1003", "CC1001", "CC1002"],
+    },
+    CC1007: {
+      partnerId: "CC1003", // Rohan Mehta
+      borrowItem: "Sony Alpha A7 IV 4K Camera",
+      returnItem: "Canon EOS Rebel DSLR Kit",
+      shareItem: "Studio Softbox Lighting Kit",
+      circlePartnerIds: ["CC1003", "CC1004", "CC1008"],
+    },
+    CC1008: {
+      partnerId: "CC1004", // Priya Nair
+      borrowItem: "Studio Softbox Lighting Kit",
+      returnItem: "Yamaha F310 Acoustic Guitar",
+      shareItem: "Shure SM58 Vocal Microphone",
+      circlePartnerIds: ["CC1004", "CC1007", "CC1002"],
+    },
+    CC1009: {
+      partnerId: "CC1005", // Kabir Patel
+      borrowItem: "Digital Oscilloscope",
+      returnItem: "Lab Centrifuge Kit",
+      shareItem: "Binocular Compound Microscope",
+      circlePartnerIds: ["CC1005", "CC1010", "CC1006"],
+    },
+    CC1010: {
+      partnerId: "CC1005", // Kabir Patel
+      borrowItem: "Soldering Workstation",
+      returnItem: "Arduino Robotics Starter Kit",
+      shareItem: "Raspberry Pi 4 8GB Kit",
+      circlePartnerIds: ["CC1005", "CC1009", "CC1001"],
+    },
+  };
 
-  // Pick partner student dynamically from store
-  const partnerUser = store.users.find((u) => u.id !== currentUser.id && u.id !== currentUser.studentId) || store.users[1];
+  const config = studentConfigMap[studentId] || studentConfigMap.CC1003;
+
+  // Retrieve user objects for primary partner and circle partners
+  const partnerUser = store.users.find((u) => u.id === config.partnerId) || store.users[1];
   const partnerFirstName = partnerUser.name.split(" ")[0];
-  const partnerDept = partnerUser.department.split(" ")[0];
+  const partnerDeptShort = partnerUser.department.split(" ")[0];
+
+  const circlePartnerUsers = config.circlePartnerIds.map(
+    (id) => store.users.find((u) => u.id === id) || store.users[0]
+  );
+
+  const borrowItemName = config.borrowItem;
+  const returnItemName = config.returnItem;
+  const shareItemName = config.shareItem;
 
   const activeCircleItems: CircleExchange[] = [
     {
       id: "c1",
-      partnerName: partnerUser.name,
-      partnerRole: partnerUser.department,
-      partnerAvatar: partnerUser.avatar,
-      avatarBg: partnerUser.avatarBg,
+      partnerName: circlePartnerUsers[0].name,
+      partnerRole: circlePartnerUsers[0].department,
+      partnerAvatar: circlePartnerUsers[0].avatar,
+      avatarBg: circlePartnerUsers[0].avatarBg,
       item: borrowItemName,
       action: "Borrowing",
       status: "Handover Scheduled",
-      location: `${partnerUser.location} @ 2:00 PM`,
+      location: `${circlePartnerUsers[0].location} @ 2:00 PM`,
       time: "Today",
     },
     {
       id: "c2",
-      partnerName: "Alex Rivera",
-      partnerRole: "Cinema Guild",
-      partnerAvatar: "A",
-      avatarBg: "#FFD928",
-      item: "Canon EOS Rebel DSLR",
-      action: "Borrowing",
-      status: "Request Pending",
-      location: "Media Lab",
+      partnerName: circlePartnerUsers[1].name,
+      partnerRole: circlePartnerUsers[1].department,
+      partnerAvatar: circlePartnerUsers[1].avatar,
+      avatarBg: circlePartnerUsers[1].avatarBg,
+      item: returnItemName,
+      action: "Returning",
+      status: "Return Due",
+      location: `${circlePartnerUsers[1].location}`,
       time: "Today @ 4:30 PM",
     },
     {
       id: "c3",
-      partnerName: "Ananya Verma",
-      partnerRole: "Design Dept",
-      partnerAvatar: "A",
-      avatarBg: "#E8DEF8",
-      item: "Shure Studio Podcast Mic",
+      partnerName: circlePartnerUsers[2].name,
+      partnerRole: circlePartnerUsers[2].department,
+      partnerAvatar: circlePartnerUsers[2].avatar,
+      avatarBg: circlePartnerUsers[2].avatarBg,
+      item: shareItemName,
       action: "Sharing",
       status: "Accepted",
-      location: "Student Center",
+      location: `${circlePartnerUsers[2].location}`,
       time: "Tomorrow",
     },
   ];
@@ -150,18 +232,15 @@ export const CampusDeiHero: React.FC = () => {
               className="flex items-center gap-3 cursor-pointer group"
             >
               <div className="flex items-center -space-x-2">
-                <div
-                  className="w-8 h-8 rounded-full text-[#151515] border-2 border-[#151518] flex items-center justify-center font-black text-xs"
-                  style={{ backgroundColor: partnerUser.avatarBg }}
-                >
-                  {partnerUser.avatar}
-                </div>
-                <div className="w-8 h-8 rounded-full bg-[#FFD928] text-[#151515] border-2 border-[#151518] flex items-center justify-center font-black text-xs">
-                  A
-                </div>
-                <div className="w-8 h-8 rounded-full bg-[#E8DEF8] text-[#151518] border-2 border-[#151518] flex items-center justify-center font-black text-xs">
-                  A
-                </div>
+                {circlePartnerUsers.map((cp) => (
+                  <div
+                    key={cp.id}
+                    className="w-8 h-8 rounded-full text-[#151515] border-2 border-[#151518] flex items-center justify-center font-black text-xs"
+                    style={{ backgroundColor: cp.avatarBg }}
+                  >
+                    {cp.avatar}
+                  </div>
+                ))}
               </div>
 
               <div className="flex flex-col">
@@ -169,7 +248,7 @@ export const CampusDeiHero: React.FC = () => {
                   Active Circle · 3 Exchanges in Motion
                 </span>
                 <span className="text-[11px] text-white/50 font-medium">
-                  {partnerFirstName} ({partnerDept}) · Alex (Cinema) · Ananya (Design)
+                  {circlePartnerUsers.map((cp) => `${cp.name.split(" ")[0]} (${cp.department.split(" ")[0]})`).join(" · ")}
                 </span>
               </div>
             </div>
