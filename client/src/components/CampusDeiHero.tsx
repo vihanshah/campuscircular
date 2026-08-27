@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import { Camera, BookOpen, Music, ArrowRight, ShieldCheck, MapPin, Clock, X, Sparkles, Repeat } from "lucide-react";
 import { getCurrentLoggedInUser, loadAppStore } from "@/lib/appStore";
-import { SoftAurora } from "@/components/ui/SoftAurora";
 import { CountUp } from "@/components/ui/CountUp";
 
 interface CircleExchange {
@@ -172,8 +171,7 @@ export const CampusDeiHero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-[#151518] text-[#FFFDF7] rounded-[32px] p-6 sm:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.18)] relative overflow-hidden border border-white/10"
         >
-          {/* React Bits Soft Aurora ambient background glow */}
-          <SoftAurora opacity={0.22} />
+
 
           {/* Card Header Row */}
           <div className="flex items-center justify-between mb-6 relative z-10">
