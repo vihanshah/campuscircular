@@ -8,6 +8,34 @@ interface CampusMapViewProps {
   onSelectResource: (resource: CampusResource) => void;
 }
 
+function resolveBuildingCoords(res: CampusResource, index: number): { xPct: number; yPct: number } {
+  if (res.mapCoords && (res.mapCoords.xPct !== 50 || res.mapCoords.yPct !== 50)) {
+    return res.mapCoords;
+  }
+
+  const loc = (res.locationName || "").toLowerCase();
+  const cat = (res.category || "").toLowerCase();
+
+  // Offset multiplier per index to prevent pin overlap
+  const offsetX = (index % 3) * 4 - 4;
+  const offsetY = Math.floor(index / 3) * 4 - 2;
+
+  if (loc.includes("tech") || loc.includes("cs") || loc.includes("design") || cat.includes("electronics")) {
+    return { xPct: 24 + offsetX, yPct: 26 + offsetY };
+  }
+  if (loc.includes("eng") || loc.includes("robotics") || loc.includes("block b") || cat.includes("tools") || cat.includes("books")) {
+    return { xPct: 60 + offsetX, yPct: 24 + offsetY };
+  }
+  if (loc.includes("arts") || loc.includes("media") || loc.includes("radio") || cat.includes("photography") || cat.includes("creative") || cat.includes("events")) {
+    return { xPct: 32 + offsetX, yPct: 74 + offsetY };
+  }
+  if (loc.includes("sport") || loc.includes("gym") || cat.includes("sports")) {
+    return { xPct: 78 + offsetX, yPct: 68 + offsetY };
+  }
+
+  return { xPct: 48 + offsetX, yPct: 48 + offsetY };
+}
+
 export const CampusMapView: React.FC<CampusMapViewProps> = ({ resources, onSelectResource }) => {
   const [selectedPin, setSelectedPin] = useState<CampusResource | null>(resources[0] || null);
 
@@ -30,7 +58,7 @@ export const CampusMapView: React.FC<CampusMapViewProps> = ({ resources, onSelec
           </div>
         </div>
 
-        <div className="text-xs font-bold text-[#151515]/60 bg-[#F3EFE6] px-3 py-1 rounded-full">
+        <div className="text-xs font-bold text-[#151515]/60 bg-[#F3EFE6] px-3 py-1 rounded-full border border-[#151515]/10">
           {resources.length} Pins Active
         </div>
       </div>
@@ -53,33 +81,34 @@ export const CampusMapView: React.FC<CampusMapViewProps> = ({ resources, onSelec
         </svg>
 
         {/* Building Labels */}
-        <div className="absolute top-[18%] left-[20%] text-[10px] font-black uppercase text-[#151515]/40 tracking-wider">
+        <div className="absolute top-[18%] left-[20%] text-[10px] font-black uppercase text-[#151515]/50 tracking-wider bg-white/70 px-2 py-0.5 rounded-md border border-[#151515]/10">
           Tech Hub / CS Dept
         </div>
-        <div className="absolute top-[14%] left-[54%] text-[10px] font-black uppercase text-[#151515]/40 tracking-wider">
+        <div className="absolute top-[14%] left-[54%] text-[10px] font-black uppercase text-[#151515]/50 tracking-wider bg-white/70 px-2 py-0.5 rounded-md border border-[#151515]/10">
           Eng Block B
         </div>
-        <div className="absolute top-[68%] left-[26%] text-[10px] font-black uppercase text-[#151515]/40 tracking-wider">
+        <div className="absolute top-[68%] left-[26%] text-[10px] font-black uppercase text-[#151515]/50 tracking-wider bg-white/70 px-2 py-0.5 rounded-md border border-[#151515]/10">
           Arts & Media Wing
         </div>
-        <div className="absolute top-[60%] left-[72%] text-[10px] font-black uppercase text-[#151515]/40 tracking-wider">
+        <div className="absolute top-[60%] left-[72%] text-[10px] font-black uppercase text-[#151515]/50 tracking-wider bg-white/70 px-2 py-0.5 rounded-md border border-[#151515]/10">
           Sports Complex
         </div>
 
         {/* Resource Pins on Map */}
-        {resources.map((res) => {
+        {resources.map((res, index) => {
           const isSelected = selectedPin?.id === res.id;
+          const coords = resolveBuildingCoords(res, index);
 
           return (
             <motion.button
               key={res.id}
               onClick={() => setSelectedPin(res)}
-              whileHover={{ scale: 1.2, zIndex: 40 }}
+              whileHover={{ scale: 1.25, zIndex: 40 }}
               whileTap={{ scale: 0.9 }}
               className="absolute z-20 cursor-pointer -translate-x-1/2 -translate-y-1/2 group"
               style={{
-                left: `${res.mapCoords.xPct}%`,
-                top: `${res.mapCoords.yPct}%`,
+                left: `${coords.xPct}%`,
+                top: `${coords.yPct}%`,
               }}
             >
               <div
@@ -96,8 +125,8 @@ export const CampusMapView: React.FC<CampusMapViewProps> = ({ resources, onSelec
               </div>
 
               {/* Pin Label Pill */}
-              <div className="absolute top-10 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#151518] text-white text-[9px] font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md pointer-events-none">
-                {res.name.substring(0, 16)}...
+              <div className="absolute top-10 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-[#151518] text-white text-[9px] font-extrabold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md pointer-events-none z-50 border border-white/20">
+                {res.name.substring(0, 18)}...
               </div>
             </motion.button>
           );
@@ -110,11 +139,11 @@ export const CampusMapView: React.FC<CampusMapViewProps> = ({ resources, onSelec
               initial={{ opacity: 0, y: 15, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 15, scale: 0.95 }}
-              className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 bg-[#FFFDF7] border border-[#151515]/10 rounded-2xl p-4 shadow-xl z-40"
+              className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-84 bg-[#FFFDF7] border border-[#151515]/10 rounded-2xl p-4 shadow-2xl z-40"
             >
               <div className="flex items-center justify-between mb-2">
                 <span
-                  className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full text-[#151515]"
+                  className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full text-[#151515]"
                   style={{ backgroundColor: selectedPin.cardColor }}
                 >
                   {selectedPin.category}
@@ -141,7 +170,7 @@ export const CampusMapView: React.FC<CampusMapViewProps> = ({ resources, onSelec
               <button
                 type="button"
                 onClick={() => onSelectResource(selectedPin)}
-                className="w-full py-2 px-3 rounded-xl bg-[#151518] text-white hover:bg-[#B92CFF] transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 px-3 rounded-xl bg-[#151518] text-white hover:bg-[#B92CFF] transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <span>View Resource Details →</span>
               </button>

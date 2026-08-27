@@ -54,7 +54,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     description: "Includes 24-70mm f/2.8 GM lens, 2 rechargeable batteries, 128GB SanDisk Extreme SD card, and padded shoulder bag.",
     cardColor: BRAND_COLORS.pastelLavender,
     imageUrl: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&auto=format&fit=crop&q=80",
-    mapCoords: { xPct: 35, yPct: 42 },
+    mapCoords: { xPct: 32, yPct: 74 }, // Arts & Media Wing (Bottom-Left)
   },
   {
     id: "res-macbook-pro",
@@ -83,7 +83,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     description: "M2 Pro chip, 16GB unified memory, preinstalled with VS Code, Adobe Suite, and Python ML environment.",
     cardColor: BRAND_COLORS.pastelYellow,
     imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80",
-    mapCoords: { xPct: 22, yPct: 30 },
+    mapCoords: { xPct: 24, yPct: 26 }, // Tech Hub / CS Dept (Top-Left)
   },
   {
     id: "res-calculator-texts",
@@ -112,7 +112,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     description: "High-resolution solar calculator approved for university exams + 3 core Artificial Intelligence hardcovers.",
     cardColor: BRAND_COLORS.pastelMint,
     imageUrl: "https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48d?w=600&auto=format&fit=crop&q=80",
-    mapCoords: { xPct: 58, yPct: 25 },
+    mapCoords: { xPct: 60, yPct: 24 }, // Eng Block B (Top-Right)
   },
   {
     id: "res-projector-4k",
@@ -141,7 +141,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     description: "Ultra-bright 4K projection with HDMI/USB-C inputs, built-in Harman Kardon speakers, and 84-inch portable screen.",
     cardColor: BRAND_COLORS.pastelLime,
     imageUrl: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=600&auto=format&fit=crop&q=80",
-    mapCoords: { xPct: 75, yPct: 60 },
+    mapCoords: { xPct: 36, yPct: 78 }, // Arts & Media Wing (Bottom-Left)
   },
   {
     id: "res-yamaha-guitar",
@@ -169,7 +169,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     ],
     description: "Full-size acoustic guitar in rich natural finish. Comes with capo, picks, tuner, and waterproof gig bag.",
     cardColor: BRAND_COLORS.pastelCoral,
-    mapCoords: { xPct: 45, yPct: 78 },
+    mapCoords: { xPct: 48, yPct: 48 }, // Central Quad (Center Pathway)
   },
   {
     id: "res-shure-mic",
@@ -197,7 +197,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     ],
     description: "Industry-standard dynamic microphone ideal for podcasting, vocal recording, and voiceover work.",
     cardColor: BRAND_COLORS.pastelLavender,
-    mapCoords: { xPct: 62, yPct: 52 },
+    mapCoords: { xPct: 28, yPct: 70 }, // Arts & Media Wing (Bottom-Left)
   },
   {
     id: "res-tennis-rackets",
@@ -225,7 +225,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     ],
     description: "Matched pair of Wilson Pro Staff 97 graphite tennis rackets with comfortable overgrips.",
     cardColor: BRAND_COLORS.pastelLime,
-    mapCoords: { xPct: 82, yPct: 38 },
+    mapCoords: { xPct: 78, yPct: 68 }, // Sports Complex (Bottom-Right)
   },
   {
     id: "res-soldering-station",
@@ -253,7 +253,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     ],
     description: "Complete electronics prototyping station with ESD-safe mat, wire strippers, digital multimeter, and solder.",
     cardColor: BRAND_COLORS.pastelYellow,
-    mapCoords: { xPct: 30, yPct: 68 },
+    mapCoords: { xPct: 62, yPct: 28 }, // Eng Block B (Top-Right)
   },
   {
     id: "res-ipad-pro",
@@ -276,7 +276,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     matchReasons: ["M1 Liquid Retina display", "0.5 km away", "Includes pressure-sensitive stylus"],
     description: "11-inch Liquid Retina display, M1 chip, 256GB storage, Apple Pencil 2, and Smart Keyboard Folio.",
     cardColor: BRAND_COLORS.pastelMint,
-    mapCoords: { xPct: 40, yPct: 35 },
+    mapCoords: { xPct: 28, yPct: 28 }, // Tech Hub / CS Dept (Top-Left)
   },
   {
     id: "res-canon-dslr",
@@ -299,7 +299,7 @@ export const MOCK_DISCOVER_RESOURCES: CampusResource[] = [
     matchReasons: ["Dual zoom lens kit", "Includes neck strap and bag", "Easy beginner controls"],
     description: "24.1 MP CMOS sensor DSLR camera with 18-55mm IS II lens and 75-300mm telephoto zoom lens.",
     cardColor: BRAND_COLORS.pastelLavender,
-    mapCoords: { xPct: 48, yPct: 50 },
+    mapCoords: { xPct: 34, yPct: 82 }, // Arts & Media Wing (Bottom-Left)
   },
 ];
 
