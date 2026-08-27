@@ -15,6 +15,7 @@ import { AdminModals } from "@/components/admin/AdminModals";
 import { AdminUsersTab } from "@/components/admin/AdminUsersTab";
 import { AdminResourcesTab } from "@/components/admin/AdminResourcesTab";
 import { AdminExchangesTab } from "@/components/admin/AdminExchangesTab";
+import { AdminLoansTab } from "@/components/admin/AdminLoansTab";
 import { AdminOverdueTab } from "@/components/admin/AdminOverdueTab";
 import { AdminDisputesTab } from "@/components/admin/AdminDisputesTab";
 import { AdminSettlementsTab } from "@/components/admin/AdminSettlementsTab";
@@ -62,8 +63,11 @@ export default function AdminDashboard() {
           {/* 2. RESOURCES TAB */}
           {activeTab === "resources" && <AdminResourcesTab />}
 
-          {/* 3. EXCHANGES & LOANS TAB */}
-          {(activeTab === "exchanges" || activeTab === "loans") && <AdminExchangesTab />}
+          {/* 3. EXCHANGES TAB */}
+          {activeTab === "exchanges" && <AdminExchangesTab />}
+
+          {/* 3B. ACTIVE LOANS TAB */}
+          {activeTab === "loans" && <AdminLoansTab />}
 
           {/* 4. OVERDUE TAB */}
           {activeTab === "overdue" && <AdminOverdueTab />}
