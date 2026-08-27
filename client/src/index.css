@@ -135,6 +135,57 @@ html {
   }
 }
 
+/* Master Dark Mode Overrides for Student Dashboard & Pages */
+.dark {
+  color-scheme: dark;
+  background-color: #0F0F14 !important;
+  color: #FFFDF7 !important;
+}
+
+.dark body {
+  background-color: #0F0F14 !important;
+  color: #FFFDF7 !important;
+}
+
+.dark .bg-\[\#FFFDF7\],
+.dark .bg-\[\#F8F6F0\],
+.dark .bg-\[\#F3EFE6\],
+.dark .bg-white {
+  background-color: #191923 !important;
+  color: #FFFDF7 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark .text-\[\#151515\],
+.dark .text-\[\#151518\] {
+  color: #FFFDF7 !important;
+}
+
+.dark .text-\[\#151515\]\/60,
+.dark .text-\[\#151515\]\/70,
+.dark .text-\[\#151515\]\/80,
+.dark .text-\[\#151515\]\/50,
+.dark .text-gray-500,
+.dark .text-gray-600 {
+  color: rgba(255, 253, 247, 0.7) !important;
+}
+
+.dark .border-\[\#151515\]\/08,
+.dark .border-\[\#151515\]\/10,
+.dark .border-\[\#151515\]\/15,
+.dark .border-gray-100,
+.dark .border-gray-200 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #12121A !important;
+  color: #FFFDF7 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
 
 
 /* Animated Glow Card Beams */

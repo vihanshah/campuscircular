@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Bell, ShieldCheck, User, Calendar, Sparkles, ChevronDown, LogOut, Menu, X } from "lucide-react";
+import { Search, Bell, ShieldCheck, User, Calendar, Sparkles, ChevronDown, LogOut, Menu, X, Sun, Moon } from "lucide-react";
 import PillNav from "./PillNav";
 import { getCurrentLoggedInUser, switchUserSession, DEMO_STUDENTS } from "@/lib/appStore";
 
@@ -10,6 +10,20 @@ export const CampusDeiHeader: React.FC = () => {
   const [showSwitchMenu, setShowSwitchMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const currentUser = getCurrentLoggedInUser();
+
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem("campus_theme") === "dark";
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("campus_theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("campus_theme", "light");
+    }
+  }, [isDarkMode]);
 
   const navItems = [
     { label: "Dashboard", href: "/app" },
@@ -87,8 +101,18 @@ export const CampusDeiHeader: React.FC = () => {
             </div>
           </div>
 
-          {/* Right — Notifications, Trust Signal, Switch Student & Profile */}
+          {/* Right — Notifications, Dark Mode Toggle, Trust Signal, Switch Student & Profile */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0 relative">
+            {/* DARK MODE TOGGLE BUTTON */}
+            <button
+              type="button"
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 rounded-full bg-[#1A1A22] border border-white/10 text-[#FFD928] hover:bg-[#252530] transition-all cursor-pointer flex items-center justify-center shadow-xs"
+              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDarkMode ? <Sun className="w-4 h-4 text-[#FFD928]" /> : <Moon className="w-4 h-4 text-[#B92CFF]" />}
+            </button>
+
             {/* Quick Demo User Switcher Dropdown */}
             <div className="relative">
               <button
